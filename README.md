@@ -1,4 +1,4 @@
-# `<Thema des Referats>`
+# `Internet of Things`
 
 ## Beispiel 1
 

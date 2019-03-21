@@ -10,3 +10,16 @@ buildNumber.properties
 
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
+
+credentials.h
+
+# Created by https://www.gitignore.io/api/platformio
+# Edit at https://www.gitignore.io/?templates=platformio
+
+### PlatformIO ###
+.pioenvs
+.piolibdeps
+.clang_complete
+.gcc-flags.json
+
+# End of https://www.gitignore.io/api/platformio

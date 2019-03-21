@@ -1,0 +1,32 @@
+// AUTOMATICALLY GENERATED FILE. PLEASE DO NOT MODIFY IT MANUALLY
+
+// PIO Unified Debugger
+//
+// Documentation: https://docs.platformio.org/page/plus/debugging.html
+// Configuration: https://docs.platformio.org/page/projectconf/section_env_debug.html
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug",
+            "executable": "d:/Schule/5AHIF/NVS_Stuetz/Referate/Berger/1819-5ahif-nvs-assignment04-referate-sev-b/.pioenvs/latest_stable/firmware.elf",
+            "toolchainBinDir": "",
+            "preLaunchTask": {
+                "type": "PlatformIO",
+                "task": "Pre-Debug"
+            },
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "platformio-debug",
+            "request": "launch",
+            "name": "PIO Debug (skip Pre-Debug)",
+            "executable": "d:/Schule/5AHIF/NVS_Stuetz/Referate/Berger/1819-5ahif-nvs-assignment04-referate-sev-b/.pioenvs/latest_stable/firmware.elf",
+            "toolchainBinDir": "",
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ]
+}
