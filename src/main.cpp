@@ -1,65 +1,99 @@
-#include <WiFiClient.h>
 #include <ESPHue.h>
-#include "credentials.h"
+#include <RestClient.h>
+#include "config.h"
 
-WiFiClient client;
-ESPHue hueLamp = ESPHue(client, HUE_API_KEY, HUE_HOST, 80);
-
-#define HUE_GROUP_ID 1
+RestClient client = RestClient(HUE_HOST);
 
 int flash_button = 0;
+int rest_delay = 1000;
 
-int getGroupAnyOn(byte groupNum)
+String response = "";
+String urlString = "";
+int statusCode = 0;
+int counter = 0;
+
+int getGroupAnyOn()
 {
-	int groupState = 0;
-	String response = hueLamp.getGroupInfo(groupNum);
+	int groupState = -1;
 
-	if (response.indexOf("\"any_on\":true") > 0)
-	{
-		groupState = 1;
-	}
-	else
-	{
-		groupState = 0;
-	}
+	response = "";
+	urlString = "/api/" + HUE_API_KEY + "/groups/1";
 
-	return groupState;
+	int url_len = urlString.length() + 1;
+	char url[url_len];
+	urlString.toCharArray(url, url_len);
+
+	//Serial.printf(url);
+
+	statusCode = client.get(url, &response);
+	delay(rest_delay);
+	Serial.print(statusCode);
+	Serial.print(response);
+	//if(statusCode/100 == 2){
+		if (response.indexOf("\"any_on\":true") > 0)
+		{
+			groupState = 1;
+		}
+		else
+		{
+			groupState = 0;
+		}
+		return groupState;
+	//}
+
+	//return -1;
 }
 
 void changeHueState()
 {
-	int groupState = getGroupAnyOn(HUE_GROUP_ID);
+	int groupState = counter;//getGroupAnyOn();
+	if(counter == 0){
+		counter = 1;
+	}else{
+		counter = 0;
+	}
+	response = "";
+	urlString = "/api/" + HUE_API_KEY + "/groups/1/action";
 
-	if (groupState == 1)
+	int str_len = urlString.length() + 1;
+	char url[str_len];
+	urlString.toCharArray(url, str_len);
+
+	if (groupState == 0)
 	{
-		hueLamp.setGroupPower(HUE_GROUP_ID, hueLamp.OFF);
+		statusCode = client.put(url, "{\"on\":true}", &response);
+		//Serial.printf("ON_NOW");
+
 	}
-	else
+	else if(groupState == 1)
 	{
-		hueLamp.setGroup(HUE_GROUP_ID, hueLamp.ON, 0, 254, 0);
+		statusCode = client.put(url, "{\"on\":false}", &response);
+		//Serial.printf("OFF_NOW");
 	}
+	delay(rest_delay);
+	if(groupState == -1 || statusCode/100 != 2){
+		//Serial.printf("ERROR");
+	}
+	Serial.print(statusCode);
+	Serial.print(response);
 }
 
 void setup()
 {
+	Serial.begin(9600);
+	client.begin(SSID, PASSWORD);
+
 	pinMode(flash_button, INPUT);
-	attachInterrupt(digitalPinToInterrupt(flash_button), changeHueState, RISING);
-
-	WiFi.begin(SSID, PASSWORD);
-
-	while (WiFi.status() != WL_CONNECTED)
-	{
-		delay(500);
-	}
 }
 
 void loop()
 {
-	if (WiFi.status() != WL_CONNECTED)
+	if (digitalRead(flash_button) == LOW)
 	{
-		while (WiFi.begin(SSID, PASSWORD) != WL_CONNECTED)
-		{
-			delay(4000);
+		while(digitalRead(flash_button) == LOW){
+			delay(100);
 		}
+		Serial.printf("PRESSED");
+		changeHueState();
 	}
 }

@@ -1,4 +1,6 @@
 target/
+presentation/
+.vscode/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -11,7 +13,7 @@ buildNumber.properties
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
 
-credentials.h
+config.h
 
 # Created by https://www.gitignore.io/api/platformio
 # Edit at https://www.gitignore.io/?templates=platformio
